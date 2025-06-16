@@ -1,0 +1,110 @@
+//Linear Ordering of Vertices such that for every Edge u -> v , u comes before v in that ordering
+
+//We can Solve this question using Both DFS and BFS both
+
+//And it can be applicable only for Directed Acyclic Graph(DAC);
+
+//Real Life Usecase of Topological sort is Dependency Graph
+
+//Most Important Pattern in Graph Jaha pe bhi dependency ke bat hori re h it is a Topological Sort
+
+class Solution {
+  public:
+  void usingDFS(int src , vector<int> &ans,  map<int , list<int>> &adjList , unordered_map<int , bool> &visited){
+       
+        visited[src] = true;
+       
+        for(auto nbr : adjList[src]){
+           if(visited[nbr] == false){
+               usingDFS(nbr , ans , adjList , visited);
+           }
+        }
+        
+        ans.push_back(src);
+    }
+  
+    vector<int> topoSort(int V, vector<vector<int>>& edges) {
+        // code here
+        
+        vector<int> ans;
+        
+        map<int , list<int>> adjList;
+        unordered_map<int , bool> visited;
+        
+       for(auto edge : edges){
+           int u = edge[0];
+           int v = edge[1];
+           
+           adjList[u].push_back(v);
+       }
+        
+       for(int i = 0 ; i < V ; i++){
+           if(visited[i] == false){
+              usingDFS(0 , ans , adjList , visited);
+           }
+       }
+        
+        reverse(ans.begin() , ans.end());
+        
+        return ans;
+    }
+};
+
+//Using BFS
+//Jis bhi Node ki Indegree 0 h vo quequ ke andar push hogi
+//to me kwh skta hu jo bhi node independent h queue keval us node ko he apne andar push krwayega
+
+class Solution {
+  public:
+   void usingBFS(int V , map<int , list<int>> &adjList ,queue<int> &order,  vector<int> &ans){
+    
+       map<int , int> inDegree;
+       
+       for(auto i : adjList){
+           for(auto nbr : i.second){
+               inDegree[nbr]++;
+           }
+       }
+       
+       for(int i = 0 ; i < V ; i++){
+            if(inDegree[i] == 0){
+                order.push(i);
+            }
+       }
+       
+       while(!order.empty()){
+           int frontNode = order.front();
+           order.pop();
+           
+           ans.push_back(frontNode);
+           
+           for(auto i : adjList[frontNode]){
+               
+               inDegree[i]--;
+               
+               if(inDegree[i] == 0){
+                   order.push(i);
+               }
+           }
+       }
+   }
+    vector<int> topoSort(int V, vector<vector<int>>& edges) {
+        // code here
+        
+       vector<int> ans;
+       queue<int> order;
+       
+       map<int , list<int>> adjList;
+        
+       for(auto edge : edges){
+           int u = edge[0];
+           int v = edge[1];
+           
+           adjList[u].push_back(v);
+       }
+        
+        usingBFS(V , adjList , order , ans);
+       
+        return ans;
+    }
+};
