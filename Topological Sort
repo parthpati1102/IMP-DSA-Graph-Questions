@@ -52,7 +52,7 @@ class Solution {
 
 //Using BFS
 //Jis bhi Node ki Indegree 0 h vo quequ ke andar push hogi
-//to me kwh skta hu jo bhi node independent h queue keval us node ko he apne andar push krwayega
+//to me keh skta hu jo bhi node independent h queue keval us node ko he apne andar push krwayega
 
 //This In Degree Aglorithms is caled Kahn's Algorithm 
 class Solution {
