@@ -1,0 +1,31 @@
+class Solution {
+public:
+    void usingDFS(int src , vector<vector<int>>& isConnected , int col , unordered_map<int , int> &visited){
+        visited[src] = true;
+
+        for(int nbr = 0 ; nbr < col ; nbr++){
+            if(isConnected[src][nbr] == 1 && visited[nbr] == false){
+                usingDFS(nbr , isConnected, col , visited);
+            }
+        }
+    }
+
+    int findCircleNum(vector<vector<int>>& isConnected) {
+        map<int , list<int>> adjList;
+
+        int row = isConnected.size();
+        int col = isConnected[0].size();
+
+        unordered_map<int , int> visited;
+        int count = 0;
+
+        for(int i = 0 ; i < row ; i++){
+            if(visited[i] == false){
+                count++;
+                usingDFS(i , isConnected , col , visited);
+            }
+        }
+
+        return count;
+    }
+};
