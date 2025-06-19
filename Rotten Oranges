@@ -1,0 +1,63 @@
+class Solution {
+public:
+    bool check(int newX , int newY , vector<vector<int>>& ans){
+        if(newX >= 0 && newX < ans.size() && newY >= 0 && newY < ans[0].size() && ans[newX][newY] == 1){
+            return true;
+        }
+
+        return false;
+    }
+
+    int orangesRotting(vector<vector<int>>& grid) {
+        vector<vector<int>> ans = grid;
+        
+        queue<pair< pair<int , int> , int> > qu;
+
+        int minTime = 0;
+
+        for(int i = 0 ; i < ans.size() ; i++){
+            for(int j = 0 ; j < ans[0].size() ; j++){
+                if(ans[i][j] == 2){
+                    qu.push({{i , j} , 0});
+                }
+            }
+        }
+
+        while(!qu.empty()){
+            auto frontPair = qu.front();
+            qu.pop();
+
+            auto coordinate = frontPair.first;
+            int time = frontPair.second;
+
+            int x = coordinate.first;
+            int y = coordinate.second;
+
+            //for UP Right Down Left
+            int dx[] = {-1 , 0 , 1 , 0};
+            int dy[] = {0 , 1 , 0 , -1};
+
+            for(int i = 0 ; i < 4 ; i++){
+
+                int newX = x + dx[i];
+                int newY = y + dy[i];
+
+                if(check(newX , newY , ans)){
+                    qu.push({{newX , newY} , time + 1});
+                    minTime = max(minTime , time + 1);
+                    ans[newX][newY] = 2;
+                }
+            }
+        }
+
+        for(int i = 0 ; i < ans.size() ; i++){
+            for(int j = 0 ; j < ans[0].size() ; j++){
+                if(ans[i][j] == 1){
+                    return -1;
+                }
+            }
+        }
+
+        return minTime;
+    }
+};
